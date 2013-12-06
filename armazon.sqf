@@ -2,7 +2,7 @@
 private ["_spawnDrone"];
 
 //TODO: Clear out contents of supply box, fill it with whatever player requested
-//TODO: Make box detach from drone if drone dies or if drone is at pickup spot
+//TODO: Make box detach from drone if drone dies or if drone is at destination
 //TODO: Maybe make assembly line sort of thing where drones pick up packages and then deliver
 //TODO: Nice feature to have would be for players to be able to send packages, too
 
@@ -50,12 +50,14 @@ _spawnDrone = {
     _drone = createVehicle ["B_UAV_01_F", position player, [], 0, "FLY"];
     removeAllActions _drone;
     createVehicleCrew _drone;
-    _color = ["#EE7621"] call getColorFromHex;
+    _boxColor = ["#EE7621"] call getColorFromHex;
+    _droneColor = ["#000000"] call getColorFromHex;
     _drone flyInHeight 2;
     _drone setpos [getpos _drone select 0, getpos _drone select 1, 2];
+    _drone setObjectTexture [0, format["#(rgb,8,8,3)color(%1,1)", _droneColor]]; //make the drone sleek black
     _package = createVehicle ["Box_NATO_Grenades_F",[getpos _drone select 0,getpos _drone select 1,(getpos _drone select 2)-0.4],[],0,"CAN_COLLIDE"];
-    _package setObjectTexture [0, format["#(rgb,8,8,3)color(%1,1)", _color]];
-    _package setObjectTexture [1, format["#(rgb,8,8,3)color(%1,1)", _color]];
+    _package setObjectTexture [0, format["#(rgb,8,8,3)color(%1,1)", _boxColor]];
+    _package setObjectTexture [1, format["#(rgb,8,8,3)color(%1,1)", _boxColor]];
     _package attachTo [_drone, [0,0,-0.4]];
     [_drone, player] call droneFollow; //For now, the drone just follows the player around.  This will be changed.
 };
